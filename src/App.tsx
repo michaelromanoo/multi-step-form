@@ -1,33 +1,36 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { SubmitHandler, useForm } from "react-hook-form";
 import "./App.css";
+import { Input } from "./components/Input";
+import { Button } from "./components/Button";
+
+interface IFormInput {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { register, handleSubmit, getValues } = useForm<IFormInput>();
+  const values = getValues();
+  // TODO: send these values to context
+  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1 className="text-center">Multi step form</h1>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="First Name"
+          placeholder="First name"
+          {...register("firstName")}
+        />
+        <Input
+          label="Last Name"
+          placeholder="Last name"
+          {...register("lastName")}
+        />
+        <Button label="Next" type="submit" />
+      </form>
     </>
   );
 }
